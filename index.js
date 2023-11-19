@@ -34,9 +34,32 @@ app.get('/subCategories', (req, res)=>{
   });
 });
 
+//getting sub categories by category
+app.get('/subCategories/:id', (req, res)=>{
+  const categoryId = req.params.id;
+    db.all('SELECT * FROM sub_category WHERE cat_id = ?', [categoryId], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ data: rows });
+  });
+});
+
 //getting all dua
 app.get('/dua', (req, res)=>{
     db.all('SELECT * FROM dua',[], (err, rows) => {
+    if (err) {
+      return res.status(500).json({ error: err.message });
+    }
+    res.json({ data: rows });
+  });
+});
+
+//getting duas by category and subcategory
+app.get('/dua/:catId/:subcatId', (req, res)=>{
+  const catId = req.params.catId;
+  const subcatId = req.params.subcatId;
+    db.all('SELECT * FROM dua WHERE cat_id = ? AND subcat_id = ?', [catId, subcatId], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
