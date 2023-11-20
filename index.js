@@ -24,16 +24,6 @@ app.get('/categories', (req, res)=>{
   });
 });
 
-//getting all sub categories
-app.get('/subCategories', (req, res)=>{
-    db.all('SELECT * FROM sub_category',[], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ data: rows });
-  });
-});
-
 //getting sub categories by category
 app.get('/subCategories/:id', (req, res)=>{
   const categoryId = req.params.id;
@@ -45,9 +35,10 @@ app.get('/subCategories/:id', (req, res)=>{
   });
 });
 
-//getting all dua
-app.get('/dua', (req, res)=>{
-    db.all('SELECT * FROM dua',[], (err, rows) => {
+//getting duas by category
+app.get('/duas/:catName', (req, res)=>{
+  const catId = req.query.cat;
+    db.all('SELECT * FROM dua WHERE cat_id = ?', [catId], (err, rows) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -56,7 +47,7 @@ app.get('/dua', (req, res)=>{
 });
 
 //getting duas by category and subcategory
-app.get('/dua/:catId/:subcatId', (req, res)=>{
+app.get('/duas/:catId/:subcatId', (req, res)=>{
   const catId = req.params.catId;
   const subcatId = req.params.subcatId;
     db.all('SELECT * FROM dua WHERE cat_id = ? AND subcat_id = ?', [catId, subcatId], (err, rows) => {
